@@ -9,7 +9,7 @@ TZ=Asia/Shanghai date
 if [ ! -n "$PULL_URL" ]
 then
   PULL_URL=https://github.com/primarydomain/replit.git
-if
+fi
 
 echo "pull remote git"
 git clone $PULL_URL temp
