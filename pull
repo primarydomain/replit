@@ -1,0 +1,40 @@
+#!/bin/bash
+
+sleep 1
+
+echo "<pre>"
+date
+TZ=Asia/Shanghai date
+
+if [ ! -n "$PULL_URL" ]
+then
+  PULL_URL=https://github.com/primarydomain/replit.git
+if
+
+echo "pull remote git"
+git clone $PULL_URL temp
+rm -fr temp/.git
+rm -fr temp/.github
+cp -fr temp/* .
+rm -fr temp
+npm install
+
+if [ -f init ]
+then
+  ./init
+fi
+
+echo "restart app"
+pids=$(pidof "node /app/index.js")
+if [ ! -n "$pids" ]
+then
+  pids=$(cat pids)
+fi
+rm pids
+for pid in ${pids[@]};
+do
+  sleep 3
+  kill $pid
+done
+
+echo "</pre>"

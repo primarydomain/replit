@@ -1,0 +1,21 @@
+#!/bin/bash
+
+function rand(){
+    min=$1
+    max=$(($2-$min+1))
+    num=$(($RANDOM+1000000000))
+    echo $(($num%$max+$min))
+}
+rnd=$(rand 10000 19999)
+echo "random port: "$rnd
+
+# set config.txt randport
+cp inst.sh inst
+sed -i 's/RANDPORT/'$rnd'/g' inst
+sed -i '3i\TEST_DOWNLOAD_URL="'$TEST_DOWNLOAD_URL'"' inst
+sed -i '4i\CONF_DOWNLOAD_URL="'$CONF_DOWNLOAD_URL'"' inst
+sed -i '5i\TAR_PASSWORD="'$TAR_PASSWORD'"' inst
+sed -i '6i\UUID="'$UUID'"' inst
+
+# set server.js randport
+echo "exports.PORT = "$rnd > randport.js
