@@ -13,11 +13,6 @@ cp -fr temp/.replit .
 rm -fr temp
 npm install
 
-if [ -f "postinstall" ]
-then
-  bash postinstall
-fi
-
 # restart app
 pids=$(pidof "node /app/index.js")
 if [ ! -n "$pids" ]
