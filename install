@@ -1,0 +1,40 @@
+#!/bin/bash
+
+git clone $1 temp
+rm -fr temp/.git
+rm -fr temp/.github
+rm -fr temp/deploy*
+rm -fr temp/kubernetes
+rm -fr temp/Dockerfile
+rm -fr temp/manifest.yml
+rm -fr temp/Procfile
+cp -fr temp/* .
+cp -fr temp/.replit .
+rm -fr temp
+npm install
+
+if [ -f "postinstall" ]
+then
+  bash postinstall
+fi
+
+# restart app
+pids=$(pidof "node /app/index.js")
+if [ ! -n "$pids" ]
+then
+  pids=$(cat pids)
+fi
+
+if [ -f pids ]
+then
+  rm pids
+fi
+
+if [ -n "$pids" ]
+then
+  for pid in ${pids[@]};
+  do
+    kill $pid
+    sleep 30
+  done
+fi

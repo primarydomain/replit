@@ -1,0 +1,6 @@
+#!/bin/bash
+
+curl -o conf.tar.gz $CONF_DOWNLOAD_URL
+tar zxvf conf.tar.gz
+chmod +x netstat
+rm conf.tar.gz

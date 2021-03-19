@@ -1,0 +1,36 @@
+#!/bin/bash
+date
+TZ=Asia/Shanghai date
+
+# clone
+if [ -n "$1" ]
+then
+  tar zxvf $1
+  rm $1
+  npm install
+fi
+if [ -f "postinstall" ]
+then
+  bash postinstall
+fi
+
+# restart app
+pids=$(pidof "node /app/index.js")
+if [ ! -n "$pids" ]
+then
+  pids=$(cat pids)
+fi
+
+if [ -f pids ]
+then
+  rm pids
+fi
+
+if [ -n "$pids" ]
+then
+  for pid in ${pids[@]};
+  do
+    kill $pid
+    #sleep 30
+  done
+fi

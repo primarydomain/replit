@@ -1,0 +1,17 @@
+# Node build artifacts
+node_modules
+npm-debug.log
+
+# Local development
+*.env
+*.dev
+.DS_Store
+
+# Docker
+#Dockerfile # ibm cloud foundry need this file
+docker-compose.yml
+
+views/pages/inst.ejs
+views/pages/inst*.ejs
+test
+pids
